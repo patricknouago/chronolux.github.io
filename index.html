@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChronoLux – Montres de Luxe</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- AOS Animation -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+/* CSS  */
+:root { --primary: #d4af37; --primary-dark: #b8972e; --text: #333; --bg: #f8f7f4; --dark: #1a1a1a; --light: #ffffff; --gray: #f5f5f5; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+header { position: fixed; top: 0; width: 100%; padding: 25px 60px; display: flex; justify-content: space-between; align-items: center; transition: all 0.5s ease; z-index: 1000; background: transparent; }
+header.scrolled { background: rgba(26,26,26,0.95); padding: 18px 60px; backdrop-filter: blur(10px); }
+header h1 { font-size: 28px; color: white; letter-spacing: 2px; }
+nav a { color: white; text-decoration: none; margin-left: 35px; font-weight: 500; font-size: 15px; transition: color 0.3s; }
+nav a:hover { color: var(--primary); }
+.hero { height: 100vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url("./jim100.jpg") center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-top: -100px; }
+.hero-content { max-width: 800px; padding: 0 20px; }
+.hero h2 { font-size: 62px; margin-bottom: 20px; font-weight: 600; }
+.hero p { font-size: 20px; margin-bottom: 40px; opacity: 0.9; }
+.cta-btn { display: inline-block; padding: 14px 40px; background: var(--primary); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.4s; box-shadow: 0 8px 25px rgba(212,175,55,0.3); }
+.cta-btn:hover { background: var(--primary-dark); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(212,175,55,0.4); }
+section { padding: 120px 60px; }
+.section-title { text-align: center; margin-bottom: 80px; }
+.section-title h3 { font-size: 42px; color: var(--dark); position: relative; display: inline-block; }
+.section-title h3::after { content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--primary); }
+.section-title p { margin-top: 30px; font-size: 18px; color: #666; max-width: 700px; margin-left: auto; margin-right: auto; }
+.carousel-container { max-width: 1400px; margin: 0 auto; position: relative; overflow: hidden; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.12); }
+.carousel { display: flex; transition: transform 0.8s ease-in-out; width: 100%; }
+.carousel-slide { min-width: 100%; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; height: 500px; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); }
+.carousel-slide img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+.carousel-slide:hover img { transform: scale(1.05); }
+.carousel-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.95) 100%); color: white; padding: 50px 40px 40px 40px; text-align: center; animation: slideInUp 0.8s ease; }
+.carousel-caption h4 { font-size: 28px; margin-bottom: 10px; color: var(--primary); font-family: 'Playfair Display', serif; }
+.carousel-caption p { font-size: 16px; opacity: 0.9; line-height: 1.6; }
+@keyframes slideInUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.carousel-controls { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10; }
+.carousel-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.4s ease; border: 2px solid transparent; }
+.carousel-dot.active { background: var(--primary); width: 35px; border-radius: 10px; box-shadow: 0 4px 15px rgba(212,175,55,0.4); }
+.carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(212,175,55,0.8); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10; transition: all 0.4s ease; display: flex; align-items: center; justify-content: center; }
+.carousel-arrow:hover { background: var(--primary); transform: translateY(-50%) scale(1.1); box-shadow: 0 8px 20px rgba(212,175,55,0.4); }
+.carousel-arrow.prev { left: 20px; }
+.carousel-arrow.next { right: 20px; }
+.products { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 50px; max-width: 1400px; margin: 0 auto; }
+.product { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.5s ease; position: relative; }
+.product:hover { transform: translateY(-15px); box-shadow: 0 25px 60px rgba(0,0,0,0.15); }
+.product img { width: 100%; height: 350px; object-fit: cover; transition: transform 0.6s ease; }
+.product:hover img { transform: scale(1.08); }
+.product-info { padding: 20px; text-align: center; }
+.product-info h4 { font-size: 22px; margin-bottom: 15px; color: var(--dark); }
+.price { font-size: 24px; font-weight: 600; color: var(--primary); margin: 15px 0; }
+.old-price { text-decoration: line-through; color:#999; font-size: 18px; margin-right:10px; }
+.promo-badge { position: absolute; top: 20px; left: 20px; background: var(--primary); color: white; padding: 8px 18px; border-radius: 30px; font-size: 14px; font-weight: 600; }
+.buy-btn { display: inline-block; margin-top: 20px; padding: 14px 35px; background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.4s; }
+.buy-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+.contact-form { background: var(--dark); color: white; }
+.form-container { max-width: 700px; margin: 0 auto; background: #222; padding: 50px; border-radius: 20px; }
+.form-container h3 { color: var(--primary); text-align: center; margin-bottom: 40px; font-size: 36px; }
+input, textarea { width: 100%; padding: 15px; margin: 12px 0; background: #333; border: none; border-radius: 10px; color: white; font-family: 'Poppins', sans-serif; }
+input::placeholder, textarea::placeholder { color: #aaa; }
+button { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.4s; }
+button:hover { background: var(--primary-dark); }
+.testimonials { background: linear-gradient(135deg, #f8f7f4 0%, #f0ebe0 100%); }
+.testimonials-container { max-width: 1400px; margin: 0 auto; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+.testimonial-card { background: white; padding: 35px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); transition: all 0.5s ease; border-left: 5px solid var(--primary); position: relative; }
+.testimonial-card:hover { transform: translateY(-10px); box-shadow: 0 15px 50px rgba(212,175,55,0.15); }
+.quote-icon { font-size: 40px; color: var(--primary); opacity: 0.3; position: absolute; top: 15px; right: 25px; }
+.stars { margin-bottom: 15px; font-size: 18px; letter-spacing: 3px; color: var(--primary); }
+.testimonial-text { font-size: 16px; color: #555; margin-bottom: 20px; line-height: 1.8; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 15px; border-top: 1px solid #eee; padding-top: 20px; }
+.author-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #e6c200); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; }
+.author-info h5 { margin: 0; font-size: 16px; color: var(--dark); font-family: 'Playfair Display', serif; }
+.author-info p { margin: 5px 0 0 0; font-size: 13px; color: #999; }
+@media (max-width: 1024px) { section { padding: 80px 40px; } header { padding: 20px 30px; } header h1 { font-size: 22px; } nav a { margin-left: 20px; font-size: 13px; } }
+@media (max-width: 768px) { section { padding: 60px 25px; } header { padding: 15px 20px; } header { display: flex; flex-direction: column; gap: 15px; } header h1 { font-size: 20px; } nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; } nav a { margin-left: 0; font-size: 12px; } .hero { height: 80vh; } .hero h2 { font-size: 40px; } .hero p { font-size: 16px; } .section-title h3 { font-size: 32px; } .section-title p { font-size: 15px; } .products { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; } .product img { height: 250px; } .product-info h4 { font-size: 18px; } .price { font-size: 20px; } .carousel-slide { height: 350px; } .carousel-caption { padding: 30px 20px 20px 20px; } .carousel-caption h4 { font-size: 20px; } .carousel-caption p { font-size: 14px; } .carousel-arrow { width: 40px; height: 40px; font-size: 18px; } .testimonials-grid { grid-template-columns: 1fr; gap: 25px; } .testimonial-card { padding: 25px; } .testimonial-text { font-size: 15px; } .form-container { padding: 30px 20px; max-width: 100%; } .form-container h3 { font-size: 28px; } input, textarea { padding: 12px; margin: 10px 0; } button { padding: 14px; font-size: 16px; } .footer-grid { gap: 30px; } footer { padding: 40px 25px 20px; } }
+@media (max-width: 480px) { section { padding: 40px 15px; } header { padding: 12px 15px; } header h1 { font-size: 18px; } nav a { font-size: 11px; margin-left: 8px; } .hero { height: 60vh; margin-top: -80px; } .hero h2 { font-size: 28px; margin-bottom: 12px; } .hero p { font-size: 14px; margin-bottom: 25px; } .cta-btn { padding: 12px 30px; font-size: 14px; } .section-title h3 { font-size: 24px; } .section-title h3::after { width: 60px; bottom: -12px; } .section-title p { font-size: 13px; margin-top: 15px; } .products { grid-template-columns: 1fr; gap: 20px; } .product { border-radius: 15px; } .product img { height: 220px; } .product-info { padding: 15px; } .product-info h4 { font-size: 16px; margin-bottom: 10px; } .price { font-size: 18px; margin: 10px 0; } .old-price { font-size: 14px; } .buy-btn { padding: 12px 25px; margin-top: 15px; font-size: 13px; } .carousel-container { border-radius: 12px; } .carousel-slide { height: 250px; } .carousel-caption { padding: 20px 15px 15px 15px; } .carousel-caption h4 { font-size: 16px; margin-bottom: 8px; } .carousel-caption p { font-size: 12px; line-height: 1.5; } .carousel-arrow { width: 35px; height: 35px; font-size: 16px; left: 10px; right: 10px; } .carousel-arrow.prev { left: 10px; } .carousel-arrow.next { right: 10px; } .carousel-dot { width: 10px; height: 10px; gap: 8px; } .carousel-dot.active { width: 25px; } .testimonials { background: linear-gradient(135deg, #f8f7f4 0%, #f0ebe0 100%); } .testimonials-grid { grid-template-columns: 1fr; } .testimonial-card { padding: 20px; border-left: 4px solid var(--primary); } .quote-icon { font-size: 30px; top: 10px; right: 15px; } .stars { font-size: 16px; } .testimonial-text { font-size: 14px; margin-bottom: 15px; } .author-avatar { width: 40px; height: 40px; font-size: 16px; } .author-info h5 { font-size: 14px; } .author-info p { font-size: 12px; } .contact-form { padding: 40px 0; } .form-container { padding: 25px 15px; border-radius: 15px; } .form-container h3 { font-size: 24px; margin-bottom: 25px; } input, textarea { padding: 11px; margin: 8px 0; border-radius: 8px; font-size: 14px; } button { padding: 12px; font-size: 15px; border-radius: 50px; } .footer-grid { grid-template-columns: 1fr; gap: 20px; } footer { padding: 30px 15px 15px; } footer h5 { font-size: 16px; margin-bottom: 12px; } footer p { font-size: 13px; } .copyright { font-size: 12px; padding: 15px; } }
+
+/* Responsive improvements: mobile menu, fluid images, hero spacing */
+.menu-toggle { display:none; background:transparent; border:2px solid rgba(255,255,255,0.15); color:white; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.menu-toggle .bar { display:block; width:20px; height:2px; background:white; margin:3px 0; }
+
+header nav { display:flex; gap:20px; align-items:center; }
+
+img { max-width:100%; height:auto; display:block; }
+
+@media (max-width: 1024px) {
+    .hero { margin-top: 0; }
+}
+
+@media (max-width: 768px) {
+    header { padding: 12px 20px; }
+    .menu-toggle { display:block; }
+    header nav { display:none; position: absolute; top: 70px; left: 0; right: 0; background: rgba(26,26,26,0.98); flex-direction: column; gap: 12px; padding: 18px 20px; }
+    header.nav-open nav { display:flex; }
+    .hero { margin-top: 0; height: 60vh; }
+    .product img { height: auto; max-height: 360px; object-fit: cover; }
+    .carousel-slide { height: 320px; }
+}
+@media (max-width: 320px) { header h1 { font-size: 16px; } nav a { font-size: 10px; margin-left: 5px; } .hero h2 { font-size: 22px; } .hero p { font-size: 12px; } .product-info h4 { font-size: 14px; } .price { font-size: 16px; } .section-title h3 { font-size: 20px; } }
+footer { background: var(--dark); color: #ccc; padding: 80px 60px 40px; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 50px; max-width: 1400px; margin:0 auto; }
+footer h5 { color:white; margin-bottom:20px; font-size:20px; }
+.copyright { text-align:center; padding:30px; background:#111; color:#777; font-size:14px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+    <h1>ChronoLux</h1>
+    <nav>
+        <a href="#">Accueil</a>
+        <a href="#offres">Offres</a>
+        <a href="#produits">Collection</a>
+        <a href="#avis">Avis Clients</a>
+        <a href="#contact">Commande</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+</header>
+
+
+<!-- HERO STATIQUE -->
+<section class="hero">
+    <div class="hero-content" data-aos="fade-up">
+        <h2>Le Temps du Luxe</h2>
+        <p>Montres d'exception alliant élégance intemporelle et précision suisse.</p>
+        <a href="#produits" class="cta-btn">Découvrir la collection</a>
+    </div>
+</section>
+
+<!-- OFFRES SIMPLIFIÉES -->
+<section id="offres" data-aos="fade-up">
+    <div class="section-title">
+        <h3>Offres du Moment</h3>
+        <p>Sélection exclusive de montres en promotion limitée</p>
+    </div>
+
+    <!-- CAROUSEL PERSONNALISATIONS -->
+    <div class="carousel-container" data-aos="fade-up">
+        <div class="carousel" id="mainCarousel">
+            <!-- Slides inchangés -->
+            <div class="carousel-slide">
+                <img src="./jim100.jpg" alt="Personnalisation Montre de Luxe 1">
+                <div class="carousel-caption">
+                    <h4>Gravure Personnalisée</h4>
+                    <p>Nos clients apprécient ajouter des initiales ou des messages personnels sur le boîtier. Un service unique pour rendre chaque montre inoubliable.</p>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="./b5.jpg" alt="Personnalisation Montre de Luxe 2">
+                <div class="carousel-caption">
+                    <h4>Bracelet Personnalisé</h4>
+                    <p>Choix de cuir premium, crocodile authentique ou or 18K. Nos clients créent des combinaisons exclusives qui reflètent leur personnalité.</p>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="./xxx.jpg" alt="Personnalisation Montre de Luxe 3">
+                <div class="carousel-caption">
+                    <h4>Cadran Exclusif</h4>
+                    <p>Personnalisez la couleur du cadran avec nos 25 teintes spéciales. De l'noir profond au bleu océan, chaque choix est unique.</p>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="./b1.jpg" alt="Personnalisation Montre de Luxe 4">
+                <div class="carousel-caption">
+                    <h4>Emballage Luxe Premium</h4>
+                    <p>Coffret de présentation personnalisé, papiers de soie fins et certificat d'authenticité gravé. Une expérience de luxe du début à la fin.</p>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="./jim0.jpg" alt="Personnalisation Montre de Luxe 5">
+                <div class="carousel-caption">
+                    <h4>Service Concierge</h4>
+                    <p>Notre équipe d'experts vous guide dans chaque détail. Consultations gratuites pour créer votre montre de rêve.</p>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="./jim2.jpg" alt="Personnalisation Montre de Luxe 6">
+                <div class="carousel-caption">
+                    <h4>Garantie à Vie</h4>
+                    <p>Chaque montre personnalisée bénéficie d'une garantie à vie incluant maintenance et restauration gratuite.</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-arrow prev" id="prevBtn">❮</button>
+        <button class="carousel-arrow next" id="nextBtn">❯</button>
+
+        <div class="carousel-controls" id="dotsContainer">
+            <div class="carousel-dot active" data-index="0"></div>
+            <div class="carousel-dot" data-index="1"></div>
+            <div class="carousel-dot" data-index="2"></div>
+            <div class="carousel-dot" data-index="3"></div>
+            <div class="carousel-dot" data-index="4"></div>
+            <div class="carousel-dot" data-index="5"></div>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUITS (STATIQUE) -->
+<section id="produits">
+    <div class="section-title" data-aos="fade-up">
+        <h3>Notre Collection</h3>
+        <p>Des pièces uniques pour les amateurs de haute horlogerie</p>
+    </div>
+    <div class="products">
+       <!-- Produit 1 -->
+<div class="product" data-aos="fade-up" data-aos-delay="100">
+    <div class="promo-badge">-15%</div>
+    <img src="./jim8.jpg" alt="Montre Élégance">
+    <div class="product-info">
+        <h4>Montre Élégance</h4>
+        <div class="price"><span class="old-price">369.7 €</span> 314.7 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20%C3%89l%C3%A9gance" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 2 -->
+<div class="product" data-aos="fade-up" data-aos-delay="200">
+    <img src="./images_69480779e83fe1.81864553.jpg" alt="Montre Classique">
+    <div class="product-info">
+        <h4>Montre Classique Noire</h4>
+        <div class="price">279 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Classique%20Noire" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 3 -->
+<div class="product" data-aos="fade-up" data-aos-delay="300">
+    <div class="promo-badge">-10%</div>
+    <img src="./images_694802e4ec8e47.70723087.jpg" alt="Montre Sport">
+    <div class="product-info">
+        <h4>Montre de luxe argent </h4>
+        <div class="price"><span class="old-price">349.7 €</span> 314.7 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Sport%20Chrono" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 4 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./jim2.jpg" alt="Montre Luxe Dorée">
+    <div class="product-info">
+        <h4>Montre Luxe Dorée</h4>
+        <div class="price">399 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Dor%C3%A9e" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 5 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <div class="promo-badge">-10%</div>
+    <img src="./jim3.jpg" alt="Montre Minimaliste">
+    <div class="product-info">
+        <h4>Montre Minimaliste</h4>
+        <div class="price"><span class="old-price">299.9 €</span> 269.9 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Minimaliste" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 6 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./images_69480779e83fe1.81864553.jpg" alt="Montre Acier Bleu">
+    <div class="product-info">
+        <h4>Montre Acier Bleu</h4>
+        <div class="price">335.2 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Acier%20Bleu" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 7 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./jim5.jpg" alt="Montre Chronographe">
+    <div class="product-info">
+        <h4>Montre Chronographe</h4>
+        <div class="price">369 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Chronographe" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 8 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <div class="promo-badge">-15%</div>
+    <img src="./jim9.jpg" alt="Montre Vintage">
+    <div class="product-info">
+        <h4>Montre Vintage Cuir</h4>
+        <div class="price"><span class="old-price">379 €</span> 322 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Vintage%20Cuir" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 9 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./lead.jpeg" alt="Montre Élégante Argent">
+    <div class="product-info">
+        <h4>Montre Élégante Argent</h4>
+        <div class="price">249 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20%C3%89l%C3%A9gante%20Argent" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 10 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./x.jpg" alt="Montre Moderne Noire">
+    <div class="product-info">
+        <h4>Montre Moderne Noire</h4>
+        <div class="price">295 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Moderne%20Noire" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 11 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./xx.jpg" alt="Montre Casual">
+    <div class="product-info">
+        <h4>Montre Casual Beige</h4>
+        <div class="price">229 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Casual%20Beige" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 12 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <div class="promo-badge">-10%</div>
+    <img src="./xxxx.jpg" alt="Montre Sportive Rouge">
+    <div class="product-info">
+        <h4>Montre Sportive Rouge</h4>
+        <div class="price"><span class="old-price">339 €</span> 305 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Sportive%20Rouge" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 13 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./xxxxxx.jpg" alt="Montre Business">
+    <div class="product-info">
+        <h4>Montre Business</h4>
+        <div class="price">359 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Business" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 14 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./xxxxxxx.jpg" alt="Montre Diver">
+    <div class="product-info">
+        <h4>Montre Diver Pro</h4>
+        <div class="price">389 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Diver%20Pro" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 15 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <div class="promo-badge">-15%</div>
+    <img src="./Rolex-Submariner-Hulk-Ref-116610LV-Mark-1.jpg" alt="Montre Submariner Style">
+    <div class="product-info">
+        <h4>Montre Submariner Verte</h4>
+        <div class="price"><span class="old-price">399 €</span> 339 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Submariner%20Verte" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 16 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./patek.jpg" alt="Montre Complications">
+    <div class="product-info">
+        <h4>Montre Complications</h4>
+        <div class="price">375 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Complications" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 17 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./1x.jpg" alt="Montre Royale">
+    <div class="product-info">
+        <h4>Montre Royale Or Rose</h4>
+        <div class="price">319 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Royale%20Or%20Rose" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 18 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./Audemars-Piguet-Royal-Oak-Black-Ceramics-34-mm-77350-1.jpg" alt="Montre Céramique Noire">
+    <div class="product-info">
+        <h4>Montre Céramique Noire</h4>
+        <div class="price">399 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20C%C3%A9ramique%20Noire" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 19 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <div class="promo-badge">-10%</div>
+    <img src="./images_6952a0b9ab2160.52299336.jpg" alt="Montre Squelette">
+    <div class="product-info">
+        <h4>Montre Squelette</h4>
+        <div class="price"><span class="old-price">349.8 €</span> 314.8 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Squelette" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 20 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./images_6952a0c7a77d11.11980642.jpg" alt="Montre GMT">
+    <div class="product-info">
+        <h4>Montre GMT Dual Time</h4>
+        <div class="price">355 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20GMT%20Dual%20Time" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 21 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./images3.jpg" alt="Montre Pilot">
+    <div class="product-info">
+        <h4>Montre Pilot Aviateur</h4>
+        <div class="price">279.9 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Pilot%20Aviateur" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 22 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./montre_6952a9ff55bbd4.02889359.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Patek Philippe</h4>
+        <div class="price">339 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 23 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b1.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Noir</h4>
+        <div class="price">342.2 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 24 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b2.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Noir Doux</h4>
+        <div class="price">339 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+
+<!-- Produit 25 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b3.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Noir</h4>
+        <div class="price">342.3 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 26 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b4.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Argent Fond Noir</h4>
+        <div class="price">338 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 27 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b5.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Argent Fond Gris</h4>
+        <div class="price">338 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 28 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b6.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Argent Fond Bleu Océan</h4>
+        <div class="price">338.9 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 29 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b7.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet</h4>
+        <div class="price">332 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 30 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b8.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Audemars Piquet Bronze Authentic</h4>
+        <div class="price">343 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 31 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b9.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Luxe Noir Classic</h4>
+        <div class="price">339 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+<!-- Produit 32 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b10.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Élégante Argent</h4>
+        <div class="price">228 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+<!-- Produit 33 -->
+<div class="product" data-aos="fade-up" data-aos-delay="400">
+    <img src="./b11.jpg" alt="Montre Luxe Bleue">
+    <div class="product-info">
+        <h4>Montre Elegante</h4>
+        <div class="price">299.5 €</div>
+        <a href="https://wa.me/33745480445?text=Bonjour%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20Montre%20Luxe%20Bleue" class="buy-btn" target="_blank">Commander via WhatsApp</a>
+    </div>
+</div>
+
+
+</div>
+</section>
+
+<!-- AVIS CLIENTS -->
+<section id="avis" class="testimonials">
+    <div class="testimonials-container">
+        <div class="section-title" data-aos="fade-up">
+            <h3>Avis de Nos Clients</h3>
+            <p>Découvrez l'expérience de nos clients satisfaits</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★</div>
+                <p class="testimonial-text">"Exceptionnelle ! La montre que j'ai achetée est d'une qualité remarquable. Livrée avec rapidité et bien emballée. Je recommande vivement ChronoLux."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">M</div>
+                    <div class="author-info"><h5>Marc Dubois</h5><p>Paris, France</p></div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"Un service client impeccable et une sélection de montres incroyable. J'ai trouvé exactement ce que je cherchais."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">S</div>
+                    <div class="author-info"><h5>Catherine Bernard</h5><p>Lyon, France</p></div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"Qualité suisse garantie et service personnalisé au top !"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">P</div>
+                    <div class="author-info"><h5>Pierre Mercier</h5><p>Bordeaux, France</p></div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text"> "Excellent rapport qualité-prix pour des montres de ce prestige. L'équipe m'a aidé à choisir celle qui correspond parfaitement à mon style."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">S</div>
+                    <div class="author-info"><h5>Sophie Laurent</h5><p>Toulouse, France</p></div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text"> "Site très bien design, navigation facile et montres extraordinaires. C'est un plaisir d'acheter chez ChronoLux. Je vais revenir sans hésiter !"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">S</div>
+                    <div class="author-info"><h5>Laurent Renaud</h5><p>Lyon, France</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT — statique -->
+<section id="contact" class="contact-form">
+    <div class="section-title" data-aos="fade-up">
+        <h3>Contactez-nous</h3>
+        <p>Pour plus d'informations ou pour commander, contactez-nous via WhatsApp, email ou envoyez-nous un message ci-dessous.</p>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:20px 60px;">
+        <div data-aos="fade-up">
+            <h4 style="color:var(--primary);margin-bottom:12px;">Nous contacter</h4>
+            <p><strong>WhatsApp :</strong> <a href="https://wa.me/33745480445" style="color:var(--primary);text-decoration:none;">+33 7 45 48 04 45</a></p>
+            <p><strong>Email :</strong> <a href="mailto:Ynis0379@gmail.com" style="color:var(--primary);text-decoration:none;">Ynis0379@gmail.com</a></p>
+
+            <h4 style="color:var(--primary);margin-top:18px;margin-bottom:8px;">Adresse de la boutique</h4>
+            <p>12 Rue de Rivoli, 75004 Paris, France</p>
+
+            <h4 style="color:var(--primary);margin-top:18px;margin-bottom:8px;">Horaires d'ouverture</h4>
+            <p>Lundi — Vendredi : 10:00 — 19:00<br>Samedi : Fermé<br>Dimanche : Fermé</p>
+
+            <p style="margin-top:18px;font-size:14px;color:#ddd;">Ou utilisez WhatsApp pour une réponse rapide et commandes directes.</p>
+        </div>
+
+        <div data-aos="fade-up">
+            <h4 style="color:var(--primary);margin-bottom:12px;">Envoyez-nous un message</h4>
+            <div class="form-container" style="background:transparent;padding:0;box-shadow:none;">
+                <form id="contactForm" action="#" method="POST">
+                    <input type="text" name="nom" placeholder="Votre nom" required>
+                    <input type="email" name="email" placeholder="Votre email" required>
+                    <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
+                    <button type="submit">Envoyer votre demande</button>
+                </form>
+                <div id="contactSuccess" style="display:none;margin-top:12px;padding:14px;border-radius:10px;background:var(--primary);color:#fff;text-align:center;font-weight:600;"></div>
+            </div>
+
+            <h4 style="color:var(--primary);margin-top:18px;margin-bottom:8px;">Localisation</h4>
+            <div style="border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.08)">
+                <iframe id="mapFrame" src="https://maps.google.com/maps?q=12%20Rue%20de%20Rivoli%2C%2075004%20Paris%2C%20France&output=embed" width="100%" height="240" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <p id="mapFallback" style="margin-top:8px;display:none;color:#ddd;">La carte n'a pas pu être chargée ici — <a href="https://www.google.com/maps/search/?api=1&query=12+Rue+de+Rivoli+75004+Paris+France" target="_blank" style="color:var(--primary);text-decoration:none;">ouvrir sur Google Maps</a> ou servez le site via un serveur (ex. `python -m http.server`) pour que l'embed fonctionne.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div>
+            <h5>ChronoLux</h5>
+            <p>Spécialiste des montres de luxe depuis 2020</p>
+        </div>
+        <div>
+            <h5>Liens rapides</h5>
+            <p>
+                <a href="#" style="color:#ccc;text-decoration:none;">Accueil</a><br>
+                <a href="#produits" style="color:#ccc;text-decoration:none;">Collection</a><br>
+                <a href="#contact" style="color:#ccc;text-decoration:none;">Contact</a>
+            </p>
+        </div>
+        <div>
+            <h5>Contact</h5>
+            <p>Email : Ynis0379@gmail.com<br> Téléphone : +33 7 45 48 04 45</p>
+        </div>
+    </div>
+</footer>
+<div class="copyright">© 2025 ChronoLux – Tous droits réservés</div>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration:1000, once:true });
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    header.classList.toggle('scrolled', window.scrollY > 100);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('mainCarousel');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentIndex = 0;
+    let autoplayInterval;
+    const slideWidth = 100;
+    function updateCarousel() {
+        carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+        dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentIndex); });
+    }
+    function nextSlide() { currentIndex = (currentIndex + 1) % slides.length; updateCarousel(); resetAutoplay(); }
+    function prevSlide() { currentIndex = (currentIndex - 1 + slides.length) % slides.length; updateCarousel(); resetAutoplay(); }
+    function goToSlide(index) { currentIndex = index; updateCarousel(); resetAutoplay(); }
+    function startAutoplay() { autoplayInterval = setInterval(nextSlide, 5000); }
+    function resetAutoplay() { clearInterval(autoplayInterval); startAutoplay(); }
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    dots.forEach(dot => { dot.addEventListener('click', () => { goToSlide(parseInt(dot.dataset.index)); }); });
+    carousel.addEventListener('mouseenter', () => { clearInterval(autoplayInterval); });
+    carousel.addEventListener('mouseleave', () => { startAutoplay(); });
+    updateCarousel(); startAutoplay();
+});
+</script>
+<script>
+// Slideshow d'images en arrière-plan du hero, sans bouton
+document.addEventListener('DOMContentLoaded', function(){
+    const images = [
+        'jim8.jpg',
+        'jim6.jpg',
+        'jim7.jpg',
+        'jim0.jpg'
+    ];
+    const container = document.getElementById('heroBgSlideshow');
+    if(!container) return;
+    let idx = 0;
+    function show(i) {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = images[i];
+        img.alt = '';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 1s;';
+        container.appendChild(img);
+        setTimeout(()=>{img.style.opacity=1;},10);
+    }
+    show(idx);
+    setInterval(()=>{
+        idx = (idx+1)%images.length;
+        show(idx);
+    },5000);
+});
+</script>
+<script>
+// Slider hero simple (images défilantes)
+document.addEventListener('DOMContentLoaded', function(){
+    const slider = document.getElementById('heroSlider');
+    const slides = slider ? slider.querySelectorAll('.hero-slide') : [];
+    const prev = document.getElementById('heroPrev');
+    const next = document.getElementById('heroNext');
+    const dotsContainer = document.getElementById('heroSliderDots');
+    let idx = 0;
+    function update(){
+        if(!slider) return;
+        slider.style.transform = `translateX(-${idx * 100}vw)`;
+        if(dotsContainer){
+            dotsContainer.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('active',i===idx));
+        }
+    }
+    function goTo(i){
+        idx = (i+slides.length)%slides.length;
+        update();
+    }
+    if(prev) prev.onclick = ()=>goTo(idx-1);
+    if(next) next.onclick = ()=>goTo(idx+1);
+    // dots
+    if(dotsContainer){
+        dotsContainer.innerHTML = '';
+        slides.forEach((_,i)=>{
+            const b=document.createElement('button');
+            b.style.cssText='width:12px;height:12px;border-radius:50%;border:none;background:#fff7;cursor:pointer;';
+            b.onclick=()=>goTo(i);
+            dotsContainer.appendChild(b);
+        });
+    }
+    update();
+    // auto slide
+    setInterval(()=>{ goTo(idx+1); }, 5000);
+});
+</script>
+
+<script>
+// Toggle menu pour mobile
+document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('menuToggle');
+    const header = document.getElementById('header');
+    if(!btn || !header) return;
+    btn.addEventListener('click', function(){
+        header.classList.toggle('nav-open');
+    });
+    // fermer le menu en cliquant sur un lien
+    header.querySelectorAll('nav a').forEach(a => a.addEventListener('click', ()=> header.classList.remove('nav-open')));
+});
+</script>
+<script>
+// Envoi du formulaire vers WhatsApp avec les champs nom, email, message
+document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('contactForm');
+    if(!form) return;
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const nom = (form.querySelector('input[name="nom"]')||{}).value || '';
+        const email = (form.querySelector('input[name="email"]')||{}).value || '';
+        const message = (form.querySelector('textarea[name="message"]')||{}).value || '';
+        // numéro WhatsApp (international, sans +)
+        const phone = '33745480445';
+
+        // Choisir salutation selon l'heure locale
+        const hour = new Date().getHours();
+        const salutation = (hour >= 18 || hour < 6) ? 'Bonsoir' : 'Bonjour';
+
+        // Message pré-rempli (même format que les boutons Commander via WhatsApp)
+        const text = `${salutation}, je suis intéressé par une montre de ChronoLux.`
+            + ` Je m'appelle ${nom}. Mon email: ${email}. Message: ${message}`;
+
+        const encoded = encodeURIComponent(text);
+        // Utiliser l'API WhatsApp pour un comportement fiable sur mobile et desktop
+        const webLink = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encoded;
+
+        // Ouvrir via clic programmatique pour réduire les blocages de pop-up
+        const a = document.createElement('a');
+        a.href = webLink;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    });
+});
+</script>
+<script>
+// Normaliser les liens "Commander via WhatsApp" pour utiliser le numéro 33745480445 (France)
+document.addEventListener('DOMContentLoaded', function(){
+    const phone = '33745480445';
+    document.querySelectorAll('.buy-btn').forEach(a => {
+        try {
+            let text = '';
+            // essayer d'extraire le paramètre 'text' si présent
+            try{
+                const u = new URL(a.href);
+                text = u.searchParams.get('text') || '';
+            }catch(e){
+                // href peut être un simple string sans host (rare) — tenter extraction manuelle
+                const q = a.href.split('?').slice(1).join('?');
+                const m = q && q.match(/text=([^&]+)/);
+                if(m) text = decodeURIComponent(m[1]);
+            }
+            if(!text){
+                // si toujours vide, utiliser le texte alternatif (nom de produit)
+                text = a.closest('.product')?.querySelector('h4')?.textContent || 'Bonjour, je suis intéressé';
+            }
+            // décoder au besoin
+            try{ text = decodeURIComponent(text); }catch(e){}
+            const newHref = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(text);
+            a.href = newHref;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+        } catch (e) { /* ignore */ }
+    });
+});
+</script>
+<script>
+// Vérifier qu'une map est chargée ; si elle est bloquée (ex: ouverture via file://), afficher fallback
+document.addEventListener('DOMContentLoaded', function(){
+    const map = document.getElementById('mapFrame');
+    const fallback = document.getElementById('mapFallback');
+    if(!map) return;
+    // Si l'iframe met trop de temps à charger, afficher le fallback
+    let loaded = false;
+    map.addEventListener('load', function(){ loaded = true; if(fallback) fallback.style.display = 'none'; });
+    setTimeout(function(){ if(!loaded && fallback) fallback.style.display = 'block'; }, 1200);
+});
+</script>
+</body>
+</html>
